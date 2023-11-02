@@ -40,9 +40,13 @@ def edit_contact():
     return 'edit contact'
 
 
-@app.route('/delete')
-def delete_contact():
-    return 'delete contact'
+@app.route('/delete/<string:id>')
+def delete_contact(id):
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM contacts WHERE id = {0}'.format(id))
+    mysql.connection.commit()
+    flash('Contact removed successfully')
+    return redirect(url_for('Index'))
 
 
 if __name__ == '__main__':
