@@ -3,7 +3,7 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-#Mysql Connetion
+# Mysql Connetion
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
@@ -14,12 +14,13 @@ mysql = MySQL(app)
 # settings
 app.secret_key = 'mysecretkey'
 
+
 @app.route('/')
 def Index():
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts')
     data = cur.fetchall()
-    return render_template('index.html', contacts = data)
+    return render_template('index.html', contacts=data)
 
 
 @app.route('/add_contact', methods=['POST'])
@@ -29,7 +30,8 @@ def add_contact():
         phone = request.form['phone']
         email = request.form['email']
         cur = mysql.connection.cursor()
-        cur.execute('INSERT INTO contacts (fullname, phone, email) VALUES (%s, %s, %s)', (fullname, phone, email))
+        cur.execute(
+            'INSERT INTO contacts (fullname, phone, email) VALUES (%s, %s, %s)', (fullname, phone, email))
         mysql.connection.commit()
         flash('Contact added successfully')
         return redirect(url_for('Index'))
@@ -40,9 +42,10 @@ def get_contact(id):
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts WHERE id = %s', (id))
     data = cur.fetchall()
-    return render_template('edit-contact.html', contact = data[0])
+    return render_template('edit-contact.html', contact=data[0])
 
-@app.route('/update/<id>', methods = ['POST'])
+
+@app.route('/update/<id>', methods=['POST'])
 def update_contact(id):
     if request.method == 'POST':
         fullname = request.form["fullname"]
@@ -59,6 +62,7 @@ def update_contact(id):
     mysql.connection.commit()
     flash('Contact update successfully')
     return redirect(url_for('Index'))
+
 
 @app.route('/delete/<string:id>')
 def delete_contact(id):
