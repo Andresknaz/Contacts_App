@@ -1,3 +1,7 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 {% for messages in messages %}
@@ -36,3 +40,5 @@
     {% endfor %}
   </tbody>
 </table>
+
+{% endblock %}
